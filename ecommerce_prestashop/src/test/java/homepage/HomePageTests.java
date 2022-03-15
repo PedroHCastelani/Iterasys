@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import pages.LoginPage;
 import pages.ProdutoPage;
 
+import java.util.List;
+
 
 public class HomePageTests extends BaseTests {
 
@@ -23,6 +25,7 @@ public class HomePageTests extends BaseTests {
         assertThat(produtosNoCarrinho, is(0));
     }
 
+    ProdutoPage produtoPage;
     @Test
     public void testValidarDetalhesDoProduto_DescricaoEValorIguais(){
         int indice = 0;
@@ -32,7 +35,7 @@ public class HomePageTests extends BaseTests {
         System.out.println(nomeProduto_HomePage);
         System.out.println(precoProduto_HomePage);
 
-        ProdutoPage produtoPage = homePage.clicarProduto(indice);
+        produtoPage = homePage.clicarProduto(indice);
 
         String nomeProduto_ProdutoPage = produtoPage.obterNomeProduto();
         String precoProduto_ProdutoPage = produtoPage.obterPrecoProduto();
@@ -44,10 +47,11 @@ public class HomePageTests extends BaseTests {
         assertThat(precoProduto_HomePage.toUpperCase(), is(precoProduto_ProdutoPage.toUpperCase()));
     }
 
-     @Test
+    LoginPage loginPage;
+    @Test
     public void testLoginComSucesso_UsuarioLogado() {
 
-        LoginPage loginPage = homePage.clicarBotaoSignIn();
+         loginPage = homePage.clicarBotaoSignIn();
 
          //Preencher usuário e senha
          loginPage.preencherEmail("pedro.castelani@hotmail.com");
@@ -58,6 +62,39 @@ public class HomePageTests extends BaseTests {
 
          //Validar se o usuário está logado de fato
         assertThat(homePage.validarLogin("Pedro Castelani"), is(true));
+
+        carregarPaginaInicial();
+    }
+
+    @Test
+    public void incluirProdutoNoCarrinho_ProdutoIncluidoComSucesso() {
+
+        //Pré-condição
+        //Usuário logado
+        if(!homePage.validarLogin("Pedro Castelani")) {
+            testLoginComSucesso_UsuarioLogado();
+        }
+
+        //Teste
+        //Selecionando produto
+        testValidarDetalhesDoProduto_DescricaoEValorIguais();
+
+        //Selecionar tamanho
+        List<String> listaOpcoes = produtoPage.obterOpcoesSelcionadas();
+
+        System.out.println(listaOpcoes.get(0));
+        System.out.println("Tamanho da lista: " + listaOpcoes.size());
+
+        //Selecionar cor
+
+        //Selecionar quantidade
+        //int addProduto = incluirProdutoNoCarrinho_ProdutoIncluidoComSucesso();
+
+       // System.out.println(addProduto);
+       // return addProduto;
+
+        //Adicionar no carrinho
+
 
     }
 }
